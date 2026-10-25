@@ -3,7 +3,11 @@
 # Le RPM preinstall (01-prereqs.sh) a deja cree le user/groupes oracle et les prerequis systeme.
 set -e
 
-ZIP_DIR="/root"
+# /root est illisible pour tout le monde sauf root (meme pas le user oracle) : on utilise
+# un repertoire dedie, lisible par tous, pour y deposer le zip.
+ZIP_DIR="/opt/install_zips"
+sudo mkdir -p "$ZIP_DIR"
+sudo chmod 755 "$ZIP_DIR"
 ZIP_FILE=$(ls "$ZIP_DIR"/LINUX.X64_23*_db_home.zip | head -1)
 
 ORACLE_BASE="/opt/oracle"
