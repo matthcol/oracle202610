@@ -20,6 +20,9 @@ sudo -u oracle -i bash <<EOF
 set -e
 export ORACLE_BASE="$ORACLE_BASE"
 export ORACLE_HOME="$ORACLE_HOME"
+# Rocky n'est pas dans la liste blanche d'OUI (erreur INS-08101 'supportedOSCheck'),
+# alors que RHEL8/OL8 sont bien certifies pour la 19c. On lui fait croire que c'est de l'OL8.
+export CV_ASSUME_DISTID=OL8
 
 unzip -oq "$ZIP_FILE" -d "\$ORACLE_HOME"
 
@@ -42,6 +45,9 @@ SECURITY_UPDATES_VIA_MYORACLESUPPORT=false
 RSP
 
 "\$ORACLE_HOME/runInstaller" -silent -ignorePrereqFailure -waitforcompletion -responseFile /tmp/db_install.rsp
+
+# Fix permanent (sinon netca/dbca refont le meme blocage CV_ASSUME_DISTID a chaque script suivant)
+echo "CV_ASSUME_DISTID=OL8" >> "\$ORACLE_HOME/cv/admin/cvu_config"
 EOF
 
 # ---- Scripts root demandes par OUI en fin d'install silencieux ----
