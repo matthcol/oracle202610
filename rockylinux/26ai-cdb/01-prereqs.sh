@@ -4,9 +4,9 @@ set -e
 # Repo public Oracle Linux (compatible Rocky, binairement proche de RHEL) : requis car
 # oracle-database-preinstall-23ai n'est pas dans les repos Rocky par defaut.
 # NOTE: a verifier - le nom exact du paquet peut differer, et il est possible qu'il faille
-# le chemin "addons" plutot que "baseos" pour cette version plus recente :
-#   sudo dnf config-manager --add-repo https://yum.oracle.com/repo/OracleLinux/OL8/addons/x86_64/
-sudo dnf config-manager --add-repo https://yum.oracle.com/repo/OracleLinux/OL8/baseos/latest/x86_64/
+# le chemin "addons" plutot que "baseos" :
+#   sudo dnf config-manager --add-repo https://yum.oracle.com/repo/OracleLinux/OL10/addons/x86_64/
+sudo dnf config-manager --add-repo https://yum.oracle.com/repo/OracleLinux/OL10/baseos/latest/x86_64/
 sudo dnf install -y oracle-database-preinstall-23ai unzip
 # Pas de mot de passe sur le compte oracle : acces uniquement via root/sudoers (sudo -u oracle -i).
 
