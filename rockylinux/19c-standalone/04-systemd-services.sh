@@ -3,7 +3,7 @@
 # (demarrage/arret automatique avec la VM). A lancer apres 03-create-database.sh.
 set -e
 
-ORACLE_HOME="/opt/oracle/product/19.3.0/dbhome_1"
+ORACLE_HOME="/oracle/product/19.3.0/dbhome_1"
 ORACLE_SID="ora19"
 
 # dbstart/dbshut ne demarrent que les instances marquees "Y" dans /etc/oratab

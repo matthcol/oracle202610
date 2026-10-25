@@ -10,8 +10,8 @@ sudo mkdir -p "$ZIP_DIR"
 sudo chmod 755 "$ZIP_DIR"
 ZIP_FILE=$(ls "$ZIP_DIR"/LINUX.X64_23*_db_home.zip | head -1)
 
-ORACLE_BASE="/opt/oracle"
-ORACLE_HOME="/opt/oracle/product/23.26.0/dbhome_1"
+ORACLE_BASE="/oracle"
+ORACLE_HOME="/oracle/product/23.26.0/dbhome_1"
 
 sudo mkdir -p "$ORACLE_HOME"
 sudo chown -R oracle:oinstall "$ORACLE_BASE"
