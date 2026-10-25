@@ -7,9 +7,11 @@ ORACLE_HOME="/oracle/product/19.3.0/dbhome_1"
 ORACLE_SID="ora19"
 DB_PASSWORD="password1234"   # sys / system identiques
 ORADATA="/oradata"
+FRA="/orabackup/fast_recovery_area"
+FRA_SIZE="8G"
 
-sudo mkdir -p "$ORADATA"
-sudo chown oracle:oinstall "$ORADATA"
+sudo mkdir -p "$ORADATA" "$FRA"
+sudo chown oracle:oinstall "$ORADATA" "$FRA"
 
 sudo -u oracle -i bash <<EOF
 set -e
@@ -18,8 +20,6 @@ export ORACLE_HOME="$ORACLE_HOME"
 export ORACLE_SID="$ORACLE_SID"
 export ORACLE_HOSTNAME=\$(hostname -s)
 export PATH="\$ORACLE_HOME/bin:\$PATH"
-
-mkdir -p "\$ORACLE_BASE/fast_recovery_area"
 
 dbca -silent -createDatabase \\
   -templateName General_Purpose.dbc \\
@@ -31,11 +31,12 @@ dbca -silent -createDatabase \\
   -memoryPercentage 40 \\
   -emConfiguration NONE \\
   -datafileDestination "$ORADATA" \\
-  -recoveryAreaDestination "\$ORACLE_BASE/fast_recovery_area" \\
+  -recoveryAreaDestination "$FRA" \\
   -storageType FS \\
   -listeners LISTENER \\
   -sysPassword $DB_PASSWORD \\
   -systemPassword $DB_PASSWORD \\
   -sampleSchema false \\
+  -initParams "db_recovery_file_dest_size=$FRA_SIZE" \\
   -ignorePreReqs
 EOF
