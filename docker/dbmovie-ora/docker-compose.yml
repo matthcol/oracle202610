@@ -1,0 +1,26 @@
+services:
+  oradb:
+    image: container-registry.oracle.com/database/enterprise:${TAG}
+    container_name: ora${SHORT_TAG}
+    hostname: ora${SHORT_TAG}
+    ports:
+      - "1522:1521"
+      - "5501:5500"
+    environment:
+      ORACLE_SID: ora${SHORT_TAG}
+      ORACLE_HOSTNAME: ora${SHORT_TAG}
+      ORACLE_PDB: dbmovie
+      ORACLE_PWD: password1234
+      INIT_SGA_SIZE: "2048"
+      INIT_PGA_SIZE: "1024"
+      ORACLE_CHARACTERSET: AL32UTF8
+      ENABLE_ARCHIVELOG: "true"
+    volumes:
+      - oradata:/opt/oracle/oradata
+      - orabackup:/backup
+      - ./sql-init:/docker-entrypoint-initdb.d/setup
+      - ./rman:/rman_scripts
+
+volumes:
+  oradata:
+  orabackup:
