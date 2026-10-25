@@ -14,21 +14,32 @@ set -e
 export ORACLE_BASE="$ORACLE_BASE"
 export ORACLE_HOME="$ORACLE_HOME"
 export ORACLE_SID="$ORACLE_SID"
+export ORACLE_HOSTNAME=\$(hostname -s)
 export PATH="\$ORACLE_HOME/bin:\$PATH"
 
-mkdir -p "\$ORACLE_BASE/oradata" "\$ORACLE_BASE/fast_recovery_area"
+mkdir -p "\$ORACLE_BASE/oradata" "\$ORACLE_BASE/fast_recovery_area" "\$ORACLE_BASE/response"
 
-# ---- 1. Listener (HOST=0.0.0.0 : evite tout souci si le hostname de la VM change plus tard) ----
-cat > "\$ORACLE_HOME/network/admin/listener.ora" <<LSNR
-LISTENER =
-  (DESCRIPTION_LIST =
-    (DESCRIPTION =
-      (ADDRESS = (PROTOCOL = TCP)(HOST = 0.0.0.0)(PORT = $LISTENER_PORT))
-      (ADDRESS = (PROTOCOL = IPC)(KEY = EXTPROC1521))
-    )
-  )
-LSNR
-lsnrctl start
+# ---- 1. Listener via netca (meme outil/syntaxe que sur Windows, template officiel valide) ----
+cat > "\$ORACLE_BASE/response/netca.rsp" <<RSP
+[GENERAL]
+RESPONSEFILE_VERSION="19.0"
+CREATE_TYPE="CUSTOM"
+
+[oracle.net.ca]
+INSTALLED_COMPONENTS={"server","net8","javavm"}
+INSTALL_TYPE=""typical""
+LISTENER_NUMBER=1
+LISTENER_NAMES={"LISTENER"}
+LISTENER_PROTOCOLS={"TCP;$LISTENER_PORT"}
+LISTENER_START=""LISTENER""
+NAMING_METHODS={"TNSNAMES","ONAMES","HOSTNAME"}
+NSN_NUMBER=1
+NSN_NAMES={"EXTPROC_CONNECTION_DATA"}
+NSN_SERVICE={"PLSExtProc"}
+NSN_PROTOCOLS={"TCP;HOSTNAME;1521"}
+RSP
+
+netca -silent -responsefile "\$ORACLE_BASE/response/netca.rsp"
 
 # ---- 2. Base de donnees (CDB obligatoire depuis la 23ai, PDB dbmovie, memoire auto simple) ----
 dbca -silent -createDatabase \\
