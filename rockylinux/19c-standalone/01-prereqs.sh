@@ -7,7 +7,8 @@ set -e
 # Oracle 19c sans RU recent n'est pas supporte sur Rocky 9/10 -> on repasse sur Rocky/OL8.
 # Confirme disponible sur OL8, dans le repo "appstream" (pas "baseos").
 sudo dnf config-manager --add-repo https://yum.oracle.com/repo/OracleLinux/OL8/appstream/x86_64/ --id=oracle
-sudo dnf config-manager --save --setopt=oracle.gpgcheck=0
+# sudo dnf config-manager --save --setopt=oracle.gpgcheck=0
+# TODO: fix automatically repo name and gpgcheck=0
 sudo dnf clean all && sudo dnf makecache
 sudo dnf install -y oracle-database-preinstall-19c unzip
 # Le RPM preinstall cree le user/groupes oracle (oinstall/dba), regle sysctl, limits.conf, etc.
