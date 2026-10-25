@@ -14,6 +14,7 @@ services:
       INIT_SGA_SIZE: "2048"
       INIT_PGA_SIZE: "1024"
       ORACLE_CHARACTERSET: AL32UTF8
+      NLS_LANG: .AL32UTF8
       ENABLE_ARCHIVELOG: "true"
     volumes:
       - oradata:/opt/oracle/oradata
