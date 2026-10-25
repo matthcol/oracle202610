@@ -4,8 +4,9 @@ set -e
 
 # Repo public Oracle Linux (compatible Rocky, binairement proche de RHEL) : requis car
 # oracle-database-preinstall-19c n'est pas dans les repos Rocky par defaut.
-# Confirme disponible sur OL10, mais dans le repo "appstream", pas "baseos".
-sudo dnf config-manager --add-repo https://yum.oracle.com/repo/OracleLinux/OL10/appstream/x86_64/ --id=oracle
+# Oracle 19c sans RU recent n'est pas supporte sur Rocky 9/10 -> on repasse sur Rocky/OL8.
+# Confirme disponible sur OL8, dans le repo "appstream" (pas "baseos").
+sudo dnf config-manager --add-repo https://yum.oracle.com/repo/OracleLinux/OL8/appstream/x86_64/ --id=oracle
 sudo dnf config-manager --save --setopt=oracle.gpgcheck=0
 sudo dnf clean all && sudo dnf makecache
 sudo dnf install -y oracle-database-preinstall-19c unzip
