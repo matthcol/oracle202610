@@ -4,11 +4,10 @@ set -e
 
 # Repo public Oracle Linux (compatible Rocky, binairement proche de RHEL) : requis car
 # oracle-database-preinstall-19c n'est pas dans les repos Rocky par defaut.
-# NOTE IMPORTANTE : Oracle 19c (sorti en 2019) n'est probablement PAS certifie sur RHEL/OL10
-# (trop recent). Si dnf ne trouve pas le paquet sur OL10, essayer OL9 ci-dessous, ou a defaut
-# preparer les prerequis manuellement (sans le RPM preinstall) si aucun des deux ne fonctionne :
-#   sudo dnf config-manager --add-repo https://yum.oracle.com/repo/OracleLinux/OL9/baseos/latest/x86_64/
-sudo dnf config-manager --add-repo https://yum.oracle.com/repo/OracleLinux/OL10/baseos/latest/x86_64/
+# Confirme disponible sur OL10, mais dans le repo "appstream", pas "baseos".
+sudo dnf config-manager --add-repo https://yum.oracle.com/repo/OracleLinux/OL10/appstream/x86_64/ --id=oracle
+sudo dnf config-manager --save --setopt=oracle.gpgcheck=0
+sudo dnf clean all && sudo dnf makecache
 sudo dnf install -y oracle-database-preinstall-19c unzip
 # Le RPM preinstall cree le user/groupes oracle (oinstall/dba), regle sysctl, limits.conf, etc.
 # Pas de mot de passe sur le compte oracle : acces uniquement via root/sudoers (sudo -u oracle -i).
