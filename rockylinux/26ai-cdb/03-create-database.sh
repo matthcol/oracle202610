@@ -3,7 +3,7 @@
 set -e
 
 ORACLE_BASE="/opt/oracle"
-ORACLE_HOME="/opt/oracle/product/23ai/dbhome_1"
+ORACLE_HOME="/opt/oracle/product/23.26.0/dbhome_1"
 ORACLE_SID="ora26"
 PDB_NAME="dbmovie"
 DB_PASSWORD="password1234"   # sys / system / pdbadmin identiques

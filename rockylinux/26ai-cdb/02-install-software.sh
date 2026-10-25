@@ -1,14 +1,45 @@
 #!/bin/bash
+# Installe le LOGICIEL Oracle 26ai depuis le zip (comme sous Windows), pas via le RPM complet.
+# Le RPM preinstall (01-prereqs.sh) a deja cree le user/groupes oracle et les prerequis systeme.
 set -e
 
-# Dossier contenant le RPM Oracle 23.26 (26ai) EE deja telecharge (a adapter)
-RPM_DIR="/root/oracle_rpms"
-RPM_FILE=$(ls "$RPM_DIR"/oracle-database-ee-23ai-*.rpm | head -1)
+ZIP_DIR="/root"
+ZIP_FILE=$(ls "$ZIP_DIR"/LINUX.X64_23*_db_home.zip | head -1)
 
-sudo dnf -y localinstall "$RPM_FILE"
+ORACLE_BASE="/opt/oracle"
+ORACLE_HOME="/opt/oracle/product/23.26.0/dbhome_1"
 
-# ORACLE_BASE/ORACLE_HOME par convention RPM (A VERIFIER juste apres install, moins certain
-# que pour la 19c : rpm -ql <nom_du_package> | grep dbhome_1, ou cat /etc/oratab)
-echo "ORACLE_BASE attendu : /opt/oracle"
-echo "ORACLE_HOME attendu : /opt/oracle/product/23ai/dbhome_1"
-ls -d /opt/oracle/product/23ai/dbhome_1 2>/dev/null || echo "Chemin different - verifier avec: rpm -ql \$(rpm -qa | grep oracle-database-ee) | grep dbhome_1"
+sudo mkdir -p "$ORACLE_HOME"
+sudo chown -R oracle:oinstall "$ORACLE_BASE"
+
+sudo -u oracle -i bash <<EOF
+set -e
+export ORACLE_BASE="$ORACLE_BASE"
+export ORACLE_HOME="$ORACLE_HOME"
+
+unzip -oq "$ZIP_FILE" -d "\$ORACLE_HOME"
+
+cat > /tmp/db_install.rsp <<RSP
+oracle.install.responseFileVersion=/oracle/install/rspfmt_dbinstall_response_schema_v19.0.0
+oracle.install.option=INSTALL_DB_SWONLY
+UNIX_GROUP_NAME=oinstall
+INVENTORY_LOCATION=\$ORACLE_BASE/oraInventory
+ORACLE_BASE=\$ORACLE_BASE
+oracle.install.db.InstallEdition=EE
+oracle.install.db.OSDBA_GROUP=dba
+oracle.install.db.OSOPER_GROUP=oper
+oracle.install.db.OSBACKUPDBA_GROUP=backupdba
+oracle.install.db.OSDGDBA_GROUP=dgdba
+oracle.install.db.OSKMDBA_GROUP=kmdba
+oracle.install.db.OSRACDBA_GROUP=racdba
+oracle.install.db.isRACOneInstall=false
+DECLINE_SECURITY_UPDATES=true
+SECURITY_UPDATES_VIA_MYORACLESUPPORT=false
+RSP
+
+"\$ORACLE_HOME/runInstaller" -silent -ignorePrereqFailure -waitforcompletion -responseFile /tmp/db_install.rsp
+EOF
+
+# ---- Scripts root demandes par OUI en fin d'install silencieux ----
+sudo "$ORACLE_BASE/oraInventory/orainstRoot.sh"
+sudo "$ORACLE_HOME/root.sh"

@@ -3,7 +3,7 @@
 set -e
 
 ORACLE_BASE="/opt/oracle"
-ORACLE_HOME="/opt/oracle/product/19c/dbhome_1"
+ORACLE_HOME="/opt/oracle/product/19.3.0/dbhome_1"
 ORACLE_SID="ora19"
 DB_PASSWORD="password1234"   # sys / system identiques
 LISTENER_PORT=1521
