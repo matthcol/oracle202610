@@ -1,0 +1,6 @@
+DIRECTORY=DATA_PUMP_DIR
+DUMPFILE=exp_dbmovie_%U.dmp
+LOGFILE=exp_dbmovie.log
+JOB_NAME=export_dbmovie
+SCHEMAS=umovie,critic
+FLASHBACK_TIME=SYSTIMESTAMP

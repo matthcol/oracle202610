@@ -1,0 +1,12 @@
+-- restauration incomplète (point-in-time recovery) jusqu'à une date/heure précise
+
+SHUTDOWN IMMEDIATE;
+STARTUP MOUNT;
+
+RUN {
+    SET UNTIL TIME "TO_DATE('2026-10-28 10:45:00','YYYY-MM-DD HH24:MI:SS')";
+    RESTORE DATABASE;
+    RECOVER DATABASE;
+}
+
+ALTER DATABASE OPEN RESETLOGS;

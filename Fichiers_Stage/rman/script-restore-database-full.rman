@@ -1,0 +1,4 @@
+run {
+    restore database;
+    recover database;
+}

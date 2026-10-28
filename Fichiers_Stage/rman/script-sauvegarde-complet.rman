@@ -1,0 +1,13 @@
+-- configuration des fichiers de backup (database + archivelog + controlfile/spfile)
+CONFIGURE CHANNEL DEVICE TYPE DISK FORMAT '/orabackup/fast_recovery_area/%d/database_%T_%U.bkp';
+CONFIGURE CONTROLFILE AUTOBACKUP ON;
+CONFIGURE CONTROLFILE AUTOBACKUP FORMAT FOR DEVICE TYPE DISK TO '/orabackup/fast_recovery_area/%d/init_%F';
+
+-- sauvegarde complete de la base
+BACKUP DATABASE;
+
+-- sauvegarde des archivelogs + menage du dossier archivelog apres backup reussi
+BACKUP ARCHIVELOG ALL DELETE ALL INPUT;
+
+-- purge des backups obsoletes selon la retention policy configuree
+DELETE NOPROMPT OBSOLETE;

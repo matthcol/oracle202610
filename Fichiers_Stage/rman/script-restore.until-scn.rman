@@ -1,0 +1,13 @@
+-- restauration incomplète (point-in-time recovery) jusqu'à un SCN précis
+-- (utile si on connaît le SCN juste avant une opération fautive, ex: via v$log ou les alertes)
+
+SHUTDOWN IMMEDIATE;
+STARTUP MOUNT;
+
+RUN {
+    SET UNTIL SCN 2868547;
+    RESTORE DATABASE;
+    RECOVER DATABASE;
+}
+
+ALTER DATABASE OPEN RESETLOGS;

@@ -8,7 +8,7 @@ ORACLE_SID="ora19"
 DB_PASSWORD="password1234"   # sys / system identiques
 ORADATA="/oradata"
 FRA="/orabackup/fast_recovery_area"
-FRA_SIZE="8G"
+FRA_SIZE="5G"
 
 sudo mkdir -p "$ORADATA" "$FRA"
 sudo chown oracle:oinstall "$ORADATA" "$FRA"

@@ -1,0 +1,11 @@
+DIRECTORY=DATA_PUMP_DIR
+DUMPFILE=exp_dbmovie_01.dmp
+LOGFILE=import_table_play_remap.log
+JOB_NAME=import_table_play_remap
+TABLES=umovie.play
+REMAP_TABLE=umovie.play:play_remap
+EXCLUDE=REF_CONSTRAINT
+EXCLUDE=CONSTRAINT
+EXCLUDE=INDEX
+EXCLUDE=OBJECT_GRANT
+EXCLUDE=STATISTICS
