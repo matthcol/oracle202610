@@ -1,6 +1,6 @@
 # Oracle Database
-Historique Oracle:
-Historique standard SQL
+- Historique Oracle : https://en.wikipedia.org/wiki/Oracle_Database#Releases_and_versions 
+- Historique standard SQL : https://en.wikipedia.org/wiki/SQL#Standardization_history
 ## Documentation
 ### Portail
 - Accueil :
